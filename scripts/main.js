@@ -1,6 +1,7 @@
-// request to play music in the background
-window.addEventListener('load', () => {
+// CONFIG: Set your target date here (Year, Month (0-11), Day, Hour, Minute, Second)
+const TARGET_DATE = new Date(2026, 0, 9, 0, 0, 0).getTime(); // April 18, 2026
 
+window.addEventListener('load', () => {
     // Dynamic Image Loading
     const photos = [
         "assets/images/photo_1_2026-01-06_22-54-35.jpg",
@@ -20,10 +21,55 @@ window.addEventListener('load', () => {
     gridImages.forEach((img, index) => {
         if (shuffledPhotos[index]) {
             img.src = shuffledPhotos[index];
-            img.alt = "Happy Birthday Memory"; 
+            img.alt = "Happy Birthday Memory";
         }
     });
 
+    // Countdown Logic
+    const countdownContainer = document.getElementById('countdown');
+
+    // Timer Function
+    const updateCountdown = () => {
+        const now = new Date().getTime();
+        const distance = TARGET_DATE - now;
+
+        if (distance < 0) {
+            // Timer expired, show main content
+            clearInterval(timerInterval);
+            countdownContainer.style.opacity = '0';
+            setTimeout(() => {
+                countdownContainer.style.display = 'none';
+                startBirthdayApp(); // Start the main app
+            }, 1000);
+            return;
+        }
+
+        // Calculate time
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        // Update DOM
+        document.getElementById('days').innerText = String(days).padStart(2, '0');
+        document.getElementById('hours').innerText = String(hours).padStart(2, '0');
+        document.getElementById('minutes').innerText = String(minutes).padStart(2, '0');
+        document.getElementById('seconds').innerText = String(seconds).padStart(2, '0');
+    };
+
+    // Check immediately
+    const now = new Date().getTime();
+    if (now >= TARGET_DATE) {
+        countdownContainer.style.display = 'none';
+        startBirthdayApp();
+    } else {
+        // Start countdown
+        updateCountdown(); // Run once immediately
+        var timerInterval = setInterval(updateCountdown, 1000);
+    }
+});
+
+const startBirthdayApp = () => {
     Swal.fire({
         title: 'Do you wanna play music in the background?',
         icon: 'warning',
@@ -40,7 +86,7 @@ window.addEventListener('load', () => {
             animationTimeline();
         }
     });
-});
+};
 
 // animation timeline
 const animationTimeline = () => {
