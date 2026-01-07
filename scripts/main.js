@@ -1,5 +1,5 @@
 // CONFIG: Set your target date here (Year, Month (0-11), Day, Hour, Minute, Second)
-const TARGET_DATE = new Date(2026, 0, 9, 0, 0, 0).getTime(); // April 18, 2026
+const TARGET_DATE = new Date(2026, 0, 7, 0, 0, 0).getTime(); // April 18, 2026
 
 window.addEventListener('load', () => {
     // Dynamic Image Loading
